@@ -1,5 +1,5 @@
-CREATE DATABASE IF NOT EXISTS trabajo_sgbd1_2;
-USE trabajo_sgbd1_2; # pon aquí el nombre de tu base de datos
+CREATE DATABASE IF NOT EXISTS bolsa_trabajo;
+USE bolsa_trabajo; 
 
 -- Tabla UNIVERSIDAD
 CREATE TABLE UNIVERSIDAD (
@@ -20,6 +20,8 @@ CREATE TABLE POSTULANTE (
     Email_Estudiante VARCHAR(100) NOT NULL,
     Teléfono_Estudiante VARCHAR(40) NOT NULL,
     ID_Universidad INT(11) NOT NULL,
+    rol VARCHAR(20) NOT NULL DEFAULT 'postulante', 
+    password_hash VARCHAR(255) NOT NULL,-- Campo para el rol del usuario, con valor por defecto
     FOREIGN KEY (ID_Universidad) REFERENCES UNIVERSIDAD(ID_Universidad)
 );
 
@@ -75,8 +77,17 @@ CREATE TABLE Empresa (
     Contrasena_Hash VARCHAR(255) NOT NULL, -- Para almacenar el hash de la contraseña
     Fecha_Registro DATE NOT NULL
 );
+CREATE TABLE usuario (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    password_hash VARCHAR(255) NOT NULL,
+    rol VARCHAR(20) NOT NULL DEFAULT 'postulante' -- Campo para el rol del usuario, con valor por defecto
+);
 
--- inserción de datos
+-- Inserción de datos (ejemplo, asumiendo que ya has hasheado las contraseñas en tu aplicación)
+INSERT INTO usuario (email, password_hash, rol) VALUES ('daya@gmail.com', 'hash_de_12345678', 'admin');
+INSERT INTO usuario (email, password_hash, rol) VALUES ('rvaleska@gmail.com', 'hash_de_abcdefg', 'admin');
+
 
 INSERT INTO curso VALUES ('100', 'Cálculo Diferencial', 'Cálculo de funciones, límites y derivadas', '5' );
 INSERT INTO curso VALUES ('101', 'Contabilidad Financiera', 'Análisis de la información financiera', '5' );
@@ -143,23 +154,10 @@ INSERT INTO VACANTE (ID_Vacante, Fecha_Postulación, Estado_Postulación, ID_Pos
 (204, '2023-11-06', 'Aceptado', 4, 403),
 (205, '2023-11-07', 'Pendiente', 5, 404);
 
--- Consultas
-
-SELECT 
-    CONCAT(p.Nombre, ' ', p.Apellido) AS Postulante,
-    c.Nombre_Curso AS Curso_Aprobado,
-    ec.Fecha_Curso,
-    u.Nombre_Universidad AS Universidad
-FROM 
-    POSTULANTE p
-JOIN 
-    ESTUD_CURSO ec ON p.ID_Postulante = ec.ID_Postulante
-JOIN 
-    CURSO c ON ec.ID_Curso = c.ID_Curso
-JOIN 
-    UNIVERSIDAD u ON p.ID_Universidad = u.ID_Universidad
-WHERE 
-    u.ID_Universidad = '301' 
-    AND ec.Estado_Curso = 'Aprobado'
-ORDER BY 
-    p.Nombre;
+-- Datos para la tabla EMPRESA
+INSERT INTO Empresa (Nombre_Empresa, Email_Contacto, Telefono_Contacto, RUC, Razon_social, Direccion_Fiscal, Direccion_Empresa, Contrasena_Hash, Fecha_Registro) VALUES
+('Tech Solutions Inc.', 'contact@techsolutions.com', '123456789', '20123456789', 'Sociedad Anonima Cerrada', 'Av. Central 123', 'Av. Central 123, Of. 401, Lima', 'a_hashed_password_1', '2023-01-15'),
+('Global Marketing Co.', 'info@globalmarketing.com', '987654321', '20987654321', 'Sociedad Anonima', 'Jr. La Luna 456', 'Jr. La Luna 456, Miraflores, Lima', 'a_hashed_password_2', '2022-11-20'),
+('Legal Advisors S.A.C.', 'admin@legaladvisors.com', '555112233', '20555112233', 'Sociedad Anonima Cerrada', 'Cl. El Sol 789', 'Cl. El Sol 789, San Isidro, Lima', 'a_hashed_password_3', '2023-03-01'),
+('Construction Pros', 'sales@constructionpros.net', '444009988', '20444009988', 'Sociedad Comercial de Responsabilidad Limitada', 'Av. Las Rocas 101', 'Av. Las Rocas 101, Santiago de Surco, Lima', 'a_hashed_password_4', '2022-09-10'),
+('Health Care Group', 'hr@healthcaregroup.org', '777334455', '20777334455', 'Asociacion Civil', 'Psje. Los Pinos 202', 'Psje. Los Pinos 202, Lince, Lima', 'a_hashed_password_5', '2023-02-28');
