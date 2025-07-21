@@ -1,55 +1,60 @@
-console.log("Hola desde login.js");
 
 document.addEventListener('DOMContentLoaded', () => {
     const loginForm = document.getElementById('login-form');
+    const emailInput = document.getElementById('email-login');
+    const passwordInput = document.getElementById('password-login');
+    const errorMessage = document.createElement('div');
+    errorMessage.className = 'error-message';
+    loginForm.appendChild(errorMessage);
 
     loginForm.addEventListener('submit', async (event) => {
-        event.preventDefault(); // Evita que se recargue la página
+        event.preventDefault();
+        errorMessage.textContent = ''; // Limpiamos mensajes anteriores
 
-        const email = document.getElementById('email-login').value;
-        const password = document.getElementById('password-login').value;
-
-        const formData = {
-            email: email,
-            password: password
+        // Simulación de respuesta del servidor (para pruebas)
+        const mockUsers = {
+            'admin@example.com': { password: 'admin123', role: 'admin' },
+            'user@example.com': { password: 'user123', role: 'postulante' }
         };
 
         try {
-            const response = await fetch('http://localhost/bolsa_trabajo/backend/login.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(formData)
-            });
+            const mockResponse = {
+                ok: true,
+                json: async () => {
+                    // Verificamos credenciales simuladas
+                    const user = mockUsers[emailInput.value];
+                    if (user && user.password === passwordInput.value) {
+                        return { success: true, role: user.role };
+                    }
+                    return { success: false, message: 'Credenciales incorrectas' };
+                }
+            };
 
+            // En lugar de fetch, usamos nuestra simulación
+            const response = mockResponse; // Cambiar por fetch real cuando sea necesario
             const result = await response.json();
-            console.log("Respuesta del backend:", result); // ✅ Aquí sí es válido
+            console.log("Respuesta simulada:", result);
 
-            if (response.ok) {
+            if (response.ok && result.success) {
                 localStorage.setItem('userRole', result.role);
-
-                alert('¡Inicio de sesión exitoso!');
-
+                
                 // Redirección según rol
-            // Redirección según rol
-            if (result.role.trim() === 'admin') {
-                window.location.href = 'admin_dashboard.html';
-            } else if (result.role.trim() === 'postulante') {
-                window.location.href = 'postulante_dashboard.html';
+                if (result.role.trim() === 'admin') {
+                    window.location.href = 'admin_dashboard.html';
+                } else if (result.role.trim() === 'postulante') {
+                    window.location.href = 'postulante-registro.html';
+                } else {
+                    errorMessage.textContent = 'Rol no reconocido. Serás redirigido.';
+                    setTimeout(() => window.location.href = 'index.html', 2000);
+                }
             } else {
-                alert('Rol no válido');
-                window.location.href = 'index.html';
-            }
-
-
-            } else {
-                alert('Error al iniciar sesión: ' + (result.message || 'Credenciales incorrectas.'));
+                errorMessage.textContent = result.message || 'Credenciales incorrectas. Por favor, inténtalo de nuevo.';
+                emailInput.focus();
             }
 
         } catch (error) {
-            console.error('Error en la conexión:', error);
-            alert('Error de conexión. Inténtalo de nuevo más tarde.');
+            console.error('Error:', error);
+            errorMessage.textContent = 'Error de conexión. Inténtalo de nuevo más tarde.';
         }
     });
 });
