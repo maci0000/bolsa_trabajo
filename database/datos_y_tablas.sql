@@ -85,8 +85,8 @@ CREATE TABLE usuario (
 );
 
 -- Inserción de datos (ejemplo, asumiendo que ya has hasheado las contraseñas en tu aplicación)
-INSERT INTO usuario (email, password_hash, rol) VALUES ('daya@gmail.com', 'hash_de_12345678', 'admin');
-INSERT INTO usuario (email, password_hash, rol) VALUES ('rvaleska@gmail.com', 'hash_de_abcdefg', 'admin');
+INSERT INTO usuario (email, password_hash, rol) VALUES ('admin@example.com', 'admin123', 'admin');
+INSERT INTO usuario (email, password_hash, rol) VALUES ('user@example.com', 'admin123', 'user');
 
 
 INSERT INTO curso VALUES ('100', 'Cálculo Diferencial', 'Cálculo de funciones, límites y derivadas', '5' );
