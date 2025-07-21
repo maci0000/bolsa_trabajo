@@ -1,38 +1,69 @@
 <?php
-header("Content-Type: application/json");
-header("Access-Control-Allow-Origin: *");
+// Mostrar errores para depuración
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
-$input = json_decode(file_get_contents("php://input"), true);
+// Encabezados
+header('Content-Type: application/json');
+header('Access-Control-Allow-Origin: *');
 
-$email = $input['email'] ?? '';
-$password = $input['password'] ?? '';
+// Conexión a la base de datos
+$host = 'localhost';
+$user = 'root';
+$password = '@LUPE22turbo';  // ← tu contraseña real
+$db = 'bolsa_trabajo';
 
-$conn = new mysqli("localhost", "root", "tu_contraseña", "bolsa_trabajo", 3307);
-
-if ($conn->connect_error) {
+$conexion = new mysqli($host, $user, $password, $db);
+if ($conexion->connect_error) {
     http_response_code(500);
-    echo json_encode(["message" => "Error de conexión"]);
-    exit();
+    echo json_encode(['message' => '❌ Error de conexión: ' . $conexion->connect_error]);
+    exit;
 }
 
-$stmt = $conn->prepare("SELECT * FROM usuario WHERE email = ?");
+// Obtener datos enviados en JSON
+$data = json_decode(file_get_contents("php://input"), true);
+
+$email = $data['email'] ?? '';
+$passwordIngresada = $data['password'] ?? '';
+
+if (empty($email) || empty($passwordIngresada)) {
+    http_response_code(400);
+    echo json_encode(['message' => '❌ Correo y contraseña son requeridos.']);
+    exit;
+}
+
+// Buscar usuario por email
+$stmt = $conexion->prepare("SELECT ID_Postulante, Nombre, password, rol FROM POSTULANTE WHERE Email_Estudiante = ?");
 $stmt->bind_param("s", $email);
 $stmt->execute();
+$resultado = $stmt->get_result();
 
-$result = $stmt->get_result();
-$user = $result->fetch_assoc();
-
-if (!$user || $password !== $user['password_hash']) {
+if ($resultado->num_rows === 0) {
     http_response_code(401);
-    echo json_encode(["message" => "Credenciales incorrectas"]);
-    exit();
+    echo json_encode(['message' => '❌ Correo no registrado.']);
+    exit;
 }
 
+$usuario = $resultado->fetch_assoc();
+
+// Verificar contraseña
+if (!password_verify($passwordIngresada, $usuario['password'])) {
+    http_response_code(401);
+    echo json_encode(['message' => '❌ Contraseña incorrecta.']);
+    exit;
+}
+
+// Si todo bien, devolver datos básicos
 echo json_encode([
-    "message" => "Login exitoso",
-    "role" => $user['rol']
+    'message' => '✅ Inicio de sesión exitoso',
+    'postulante' => [
+        'id' => $usuario['ID_Postulante'],
+        'nombre' => $usuario['Nombre'],
+        'rol' => $usuario['rol']
+    ]
 ]);
 
 $stmt->close();
-$conn->close();
+$conexion->close();
 ?>

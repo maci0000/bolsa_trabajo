@@ -1,17 +1,15 @@
 document.addEventListener('DOMContentLoaded', () => {
     const universidadSelect = document.getElementById('universidad');
+    const postulanteForm = document.getElementById('postulante-form');
 
+    // Cargar universidades desde el backend
     async function loadUniversidades() {
         try {
-            const response = await fetch('http://localhost/bolsa_trabajo/backend/universidades.php'); // ✅ asegúrate de que esta ruta sea correcta
-
-            if (!response.ok) {
-                throw new Error('Error al cargar las universidades');
-            }
+            const response = await fetch('http://localhost/bolsa_trabajo/backend/universidades.php');
+            if (!response.ok) throw new Error('No se pudo cargar universidades');
 
             const universidades = await response.json();
 
-            // Limpiar y agregar opciones
             universidadSelect.innerHTML = '<option value="">Selecciona tu Universidad</option>';
             universidades.forEach(uni => {
                 const option = document.createElement('option');
@@ -20,52 +18,47 @@ document.addEventListener('DOMContentLoaded', () => {
                 universidadSelect.appendChild(option);
             });
         } catch (error) {
-            console.error('Error:', error);
-            alert('No se pudieron cargar las universidades. Inténtalo de nuevo más tarde.');
+            console.error('Error al cargar universidades:', error);
+            alert('No se pudieron cargar las universidades. Intenta más tarde.');
         }
     }
 
-    // Cargar al abrir la página
-    loadUniversidades();
-});
+    loadUniversidades(); // Llamar al cargar la página
 
     // Manejar el envío del formulario
     postulanteForm.addEventListener('submit', async (event) => {
-        event.preventDefault(); // Evitar el envío por defecto del formulario
+        event.preventDefault();
 
-        const nombre = document.getElementById('nombre').value;
-        const apellido = document.getElementById('apellido').value;
-        const email = document.getElementById('email').value;
-        const password = document.getElementById('password').value;
+        // Asegúrate de que todos los IDs existen en tu HTML
+        const formData = {
+            Nombre: document.getElementById('nombre').value.trim(),
+            Apellido: document.getElementById('apellido').value.trim(),
+            Email_Estudiante: document.getElementById('email').value.trim(),
+            password: document.getElementById('password').value,
+            Carrera: document.getElementById('carrera').value.trim(),
+            Año_Ingreso: parseInt(document.getElementById('año-ingreso').value),
+            Teléfono_Estudiante: document.getElementById('telefono').value.trim(),
+            ID_Universidad: parseInt(universidadSelect.value)
+        };
+
         const confirmPassword = document.getElementById('confirm-password').value;
-        const carrera = document.getElementById('carrera').value;
-        const añoIngreso = document.getElementById('año-ingreso').value;
-        const telefono = document.getElementById('telefono').value;
-        const idUniversidad = universidadSelect.value;
-
-        if (password !== confirmPassword) {
+        if (formData.password !== confirmPassword) {
             alert('Las contraseñas no coinciden.');
             return;
         }
 
-        if (!idUniversidad) {
-            alert('Por favor, selecciona tu universidad.');
-            return;
+        // Validación básica
+        for (const campo in formData) {
+            if (!formData[campo]) {
+                alert(`Por favor completa el campo: ${campo}`);
+                return;
+            }
         }
 
-        const formData = {
-            Nombre: nombre,
-            Apellido: apellido,
-            Email_Estudiante: email,
-            password: password, // Asegúrate de que tu backend hashee esto
-            Carrera: carrera,
-            Año_Ingreso: parseInt(añoIngreso),
-            Teléfono_Estudiante: telefono,
-            ID_Universidad: parseInt(idUniversidad)
-        };
+        console.log('📤 Enviando al backend:', formData);
 
         try {
-            const response = await fetch('http://localhost:3000/api/postulantes/registro', { // Ajusta la URL de tu backend
+            const response = await fetch('http://localhost/bolsa_trabajo/backend/registro_postulante.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -73,16 +66,26 @@ document.addEventListener('DOMContentLoaded', () => {
                 body: JSON.stringify(formData)
             });
 
-            const result = await response.json();
+            const resultText = await response.text();
+            console.log('📥 Respuesta cruda del servidor:', resultText);
+
+            let result;
+            try {
+                result = JSON.parse(resultText);
+            } catch (e) {
+                throw new Error('⚠️ El backend no devolvió un JSON válido. Respuesta: ' + resultText);
+            }
 
             if (response.ok) {
-                alert('¡Registro exitoso! Ya puedes iniciar sesión.');
-                window.location.href = 'login.html'; // Redirigir a la página de login
+                alert('✅ ¡Registro exitoso! Ya puedes iniciar sesión.');
+                window.location.href = 'login.html'; // Redirige si quieres
             } else {
-                alert('Error al registrar: ' + (result.message || 'Hubo un problema.'));
+                alert('❌ Error al registrar: ' + (result.message || 'Error desconocido'));
             }
+
         } catch (error) {
-            console.error('Error en la conexión:', error);
+            console.error('🚨 Error en la conexión:', error);
             alert('Error de conexión. Inténtalo de nuevo más tarde.');
         }
     });
+});

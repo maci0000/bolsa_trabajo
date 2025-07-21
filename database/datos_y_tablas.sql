@@ -12,7 +12,7 @@ CREATE TABLE UNIVERSIDAD (
 
 -- Tabla POSTULANTE
 CREATE TABLE POSTULANTE (
-    ID_Postulante INT(11) NOT NULL PRIMARY KEY,
+    ID_Postulante INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
     Carrera VARCHAR(20) NOT NULL,
     Año_Ingreso YEAR NOT NULL,
     Nombre VARCHAR(40) NOT NULL,
@@ -21,7 +21,7 @@ CREATE TABLE POSTULANTE (
     Teléfono_Estudiante VARCHAR(40) NOT NULL,
     ID_Universidad INT(11) NOT NULL,
     rol VARCHAR(20) NOT NULL DEFAULT 'postulante', 
-    password_hash VARCHAR(255) NOT NULL,-- Campo para el rol del usuario, con valor por defecto
+    password VARCHAR(255) NOT NULL,-- Campo para el rol del usuario, con valor por defecto
     FOREIGN KEY (ID_Universidad) REFERENCES UNIVERSIDAD(ID_Universidad)
 );
 
@@ -80,13 +80,13 @@ CREATE TABLE Empresa (
 CREATE TABLE usuario (
     id INT AUTO_INCREMENT PRIMARY KEY,
     email VARCHAR(100) NOT NULL UNIQUE,
-    password_hash VARCHAR(255) NOT NULL,
+    password VARCHAR(255) NOT NULL,
     rol VARCHAR(20) NOT NULL DEFAULT 'postulante' -- Campo para el rol del usuario, con valor por defecto
 );
 
 -- Inserción de datos (ejemplo, asumiendo que ya has hasheado las contraseñas en tu aplicación)
-INSERT INTO usuario (email, password_hash, rol) VALUES ('daya@gmail.com', 'hash_de_12345678', 'admin');
-INSERT INTO usuario (email, password_hash, rol) VALUES ('rvaleska@gmail.com', 'hash_de_abcdefg', 'admin');
+INSERT INTO usuario (email, password, rol) VALUES ('daya@gmail.com', 'hash_de_12345678', 'admin');
+INSERT INTO usuario (email, password, rol) VALUES ('rvaleska@gmail.com', 'hash_de_abcdefg', 'admin');
 
 
 INSERT INTO curso VALUES ('100', 'Cálculo Diferencial', 'Cálculo de funciones, límites y derivadas', '5' );
@@ -120,11 +120,12 @@ select Nombre_Universidad from universidad where Dirección_Universidad like '%C
 select Nombre_Universidad from universidad where Dirección_Universidad like '%La Molina%';
 select Nombre_Universidad from universidad where Nombre_Universidad like '%Nacional%';
 
-INSERT INTO POSTULANTE values (1, 'Ingeniería', 2020, 'Juan', 'Pérez', 'juan.perez@email.com', '+1234567890', 301);
-INSERT INTO POSTULANTE values (2, 'Medicina', 2019, 'María', 'Gómez', 'maria.gomez@email.com', '+9876543210', 301);
-INSERT INTO POSTULANTE values (3, 'Derecho', 2021, 'Carlos', 'López', 'carlos.lopez@email.com', '+1122334455', 302);
-INSERT INTO POSTULANTE values (4, 'Administración', 2020, 'Ana', 'Martínez', 'ana.martinez@email.com', '+5566778899', 303);
-INSERT INTO POSTULANTE values (5, 'Arquitectura', 2018, 'Luisa', 'Rodríguez', 'luisa.rodriguez@email.com', '+9988776655', 302);
+INSERT INTO POSTULANTE (Carrera, Año_Ingreso, Nombre, Apellido, Email_Estudiante, Teléfono_Estudiante, ID_Universidad, password)
+VALUES ('Ingeniería', 2020, 'Juan', 'Pérez', 'juan.perez@email.com', '+1234567890', 301, 'password123'),
+ ('Medicina', 2019, 'María', 'Gómez', 'maria.gomez@email.com', '+9876543210', 301, 'password456'),
+ ('Derecho', 2021, 'Carlos', 'López', 'carlos.lopez@email.com', '+1122334455', 302, 'password789'),
+ ('Administración', 2020, 'Ana', 'Martínez', 'ana.martinez@email.com', '+5566778899', 303, 'passwordabc'),
+ ('Arquitectura', 2018, 'Luisa', 'Rodríguez', 'luisa.rodriguez@email.com', '+9988776655', 302, 'passwordxyz');
 
 INSERT INTO PUESTO_TRABAJO (ID_Puesto, Titulo_Puesto, Descripción_Puesto, Fecha_Publicación, Vacantes) VALUES
 (401, 'Desarrollador Backend', 'Desarrollo de APIs con Java y Spring Boot', '2023-10-15', 3),
