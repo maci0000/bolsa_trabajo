@@ -29,7 +29,7 @@ document.getElementById('application-form').addEventListener('submit', async (e)
       mensaje: document.getElementById('applicant-message').value || null
     };
 
-    const response = await fetch('../backend/aplicar_puesto.php', {
+    const response = await fetch('../backend/registrar_postulante.php', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(formData)
