@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusConnect - Ofertas Laborales</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+    <link rel="stylesheet" as="style" onload="this.rel='stylesheet'" href="https://fonts.googleapis.com/css2?display=swap&amp;family=Inter%3Awght%40400%3B500%3B700%3B900&amp;family=Noto+Sans%3Awght%40400%3B500%3B700%3B900">
+    <link rel="icon" type="image/x-icon" href="data:image/x-icon;base64,">
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script src="js/aplicaciones.js"></script>
+    <style>
+        .job-card {
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .job-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+        
+        .course-badge {
+            background-color: #e7edf3;
+            color: #0e141b;
+            border-radius: 9999px;
+            padding: 0.25rem 0.75rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+        
+        .modal {
+            transition: opacity 0.3s ease;
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen bg-slate-50" style='font-family: Inter, "Noto Sans", sans-serif;'>
+    <!-- Header -->
+    <header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#e7edf3] px-10 py-3">
+        <div class="flex items-center gap-8">
+            <div class="flex items-center gap-4 text-[#0e141b]">
+                <div class="size-4">
+                    <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 6H42L36 24L42 42H6L12 24L6 6Z" fill="currentColor"></path></svg>
+                </div>
+                <h2 class="text-[#0e141b] text-lg font-bold leading-tight tracking-[-0.015em]">CampusConnect</h2>
+            </div>
+            <div class="flex items-center gap-9">
+                <a class="text-[#0e141b] text-sm font-medium leading-normal" href="index.html">Home</a>
+            </div>
+        </div>
+        <div class="flex flex-1 justify-end gap-8">
+            <label class="flex flex-col min-w-40 !h-10 max-w-64">
+                <div class="flex w-full flex-1 items-stretch rounded-lg h-full">
+                    <div class="text-[#4e7097] flex border-none bg-[#e7edf3] items-center justify-center pl-4 rounded-l-lg border-r-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256">
+                            <path d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"></path>
+                        </svg>
+                    </div>
+                    <input placeholder="Search" class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[#0e141b] focus:outline-0 focus:ring-0 border-none bg-[#e7edf3] focus:border-none h-full placeholder:text-[#4e7097] px-4 rounded-l-none border-l-0 pl-2 text-base font-normal leading-normal" id="search-jobs" value="">
+                </div>
+            </label>
+            <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBoeqq4Be4Nb3Vjh00Njq5aKr7LWRCPj4VCxmzgKnNiM9CW1JjyouZmFV11aqjir-CHz3Vd6U0OQjBeo1N9s6wd8fxqnvCa0_Jp_vlyznF1xd_090hc0KAOW9eIKKqmoOSZASYbUo-KKIqbSO4imQac8kxVXOWerIqBZyVDLIFSBzZuDVfnuKgEHuSJalniy3L61oUCg7qpFFKYjOutxquYHpCX1k40KzrzMNCGMexBspe5L5hnn_fXb181Hmm0567x0uk_yqul7epW");'></div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-1 px-10 py-5">
+        <div class="max-w-7xl mx-auto">
+            <!-- Page Header -->
+            <div class="flex flex-wrap justify-between gap-3 p-4">
+                <div class="flex min-w-72 flex-col gap-3">
+                    <h1 class="text-[#0e141b] tracking-light text-[32px] font-bold leading-tight">Ofertas Laborales</h1>
+                    <p class="text-[#4e7097] text-sm font-normal leading-normal">Encuentra oportunidades que coincidan con tu formación universitaria.</p>
+                </div>
+            </div>
+
+            <!-- Filters -->
+            <div class="flex flex-col gap-4 mb-6">
+                <h3 class="text-[#0e141b] text-lg font-bold leading-tight tracking-[-0.015em] px-4">Filtros</h3>
+                <div class="flex gap-3 p-3 flex-wrap">
+                    <select id="filter-field" class="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-[#e7edf3] pl-4 pr-2 text-[#0e141b] text-sm font-medium leading-normal">
+                        <option value="">Todos los campos</option>
+                        <option value="Desarrollo">Desarrollo</option>
+                        <option value="Legal">Legal</option>
+                        <option value="Marketing">Marketing</option>
+                        <option value="Ingeniería">Ingeniería</option>
+                        <option value="Salud">Salud</option>
+                    </select>
+                    
+                    <select id="filter-company" class="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-[#e7edf3] pl-4 pr-2 text-[#0e141b] text-sm font-medium leading-normal">
+                        <option value="">Todas las empresas</option>
+                        <option value="Tech Solutions Inc.">Tech Solutions Inc.</option>
+                        <option value="Global Marketing Co.">Global Marketing Co.</option>
+                        <option value="Legal Advisors S.A.C.">Legal Advisors S.A.C.</option>
+                        <option value="Construction Pros">Construction Pros</option>
+                        <option value="Health Care Group">Health Care Group</option>
+                    </select>
+                    
+                    <select id="filter-course" class="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-[#e7edf3] pl-4 pr-2 text-[#0e141b] text-sm font-medium leading-normal">
+                        <option value="">Todos los cursos</option>
+                        <option value="100">Cálculo Diferencial</option>
+                        <option value="101">Contabilidad Financiera</option>
+                        <option value="102">Marketing Digital</option>
+                        <option value="103">Diseño gráfico</option>
+                        <option value="104">Fundamentos de programación</option>
+                        <option value="105">Economía General</option>
+                        <option value="106">Teoría del Derecho</option>
+                        <option value="107">Microbiología General</option>
+                        <option value="108">Geotecnia</option>
+                        <option value="109">Fisiología Ve   al</option>
+                        <option value="110">Química Orgánica</option>
+                        <option value="111">Estadística Aplicada</option>
+                        <option value="112">Periodismo de Investigación</option>
+                        <option value="113">Teoría de la Comunicación</option>
+                        <option value="114">Legislación laboral</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Job Listings -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-4" id="job-listings">
+                <!-- Las ofertas se cargarán aquí con JavaScript -->
+            </div>
+        </div>
+    </main>
+
+<!-- Modal de aplicación -->
+<div class="modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden" id="apply-modal">
+    <div class="bg-white rounded-lg p-6 w-full max-w-md max-h-[90vh] overflow-y-auto">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-bold text-[#0e141b]">Aplicar a <span id="modal-job-title"></span></h2>
+            <button class="close-modal text-[#4e7097] hover:text-[#0e141b]">&times;</button>
+        </div>
+        <form id="application-form" class="space-y-4">
+            <!-- Campo oculto para el ID del puesto -->
+            <input type="hidden" id="job-id" name="job_id">
+            
+            <div>
+                <label for="applicant-name" class="block text-sm font-medium text-[#4e7097] mb-1">Nombre completo</label>
+                <input type="text" id="applicant-name" name="nombre" required class="w-full px-3 py-2 border border-[#e7edf3] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3498db]">
+            </div>
+            
+            <div>
+                <label for="applicant-email" class="block text-sm font-medium text-[#4e7097] mb-1">Correo electrónico</label>
+                <input type="email" id="applicant-email" name="email" required class="w-full px-3 py-2 border border-[#e7edf3] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3498db]">
+            </div>
+            
+            <div>
+                <label for="applicant-phone" class="block text-sm font-medium text-[#4e7097] mb-1">Teléfono</label>
+                <input type="tel" id="applicant-phone" name="telefono" required class="w-full px-3 py-2 border border-[#e7edf3] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3498db]">
+            </div>
+            
+            <div>
+                <label for="applicant-university" class="block text-sm font-medium text-[#4e7097] mb-1">Universidad</label>
+                <select id="applicant-university" name="universidad" required class="w-full px-3 py-2 border border-[#e7edf3] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3498db]">
+                    <option value="">Seleccione su universidad</option>
+                    <option value="301">Universidad Nacional Agraria La Molina</option>
+                    <option value="302">Universidad Nacional Mayor de San Marcos</option>
+                    <option value="303">Universidad Nacional de Ingeniería</option>
+                    <option value="304">Pontificia Universidad Católica del Perú</option>
+                    <option value="305">Universidad San Ignacio de Loyola</option>
+                    <option value="306">Universidad Tecnológica del Perú</option>
+                    <option value="307">Universidad de Lima</option>
+                    <option value="308">Universidad Peruana Cayetano Heredia</option>
+                </select>
+            </div>
+            
+            <div>
+                <label for="applicant-cv" class="block text-sm font-medium text-[#4e7097] mb-1">URL de tu CV (LinkedIn, Google Drive, etc.)</label>
+                <input type="url" id="applicant-cv" name="cv_url" required class="w-full px-3 py-2 border border-[#e7edf3] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3498db]">
+            </div>
+            
+            <div>
+                <label for="applicant-message" class="block text-sm font-medium text-[#4e7097] mb-1">Mensaje adicional (opcional)</label>
+                <textarea id="applicant-message" name="mensaje" rows="4" class="w-full px-3 py-2 border border-[#e7edf3] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3498db]"></textarea>
+            </div>
+            
+            <button type="submit" class="w-full bg-[#e74c3c] text-white py-2 px-4 rounded-lg hover:bg-[#c0392b] transition duration-300">
+                <span id="submit-text">Enviar aplicación</span>
+                <span id="submit-spinner" class="hidden">Enviando...</span>
+            </button>
+        </form>
+    </div>
+</div>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-[#e7edf3] py-8">
+        <div class="max-w-7xl mx-auto px-10">
+            <div class="flex flex-col items-center text-center">
+                <div class="flex flex-wrap justify-center gap-6 mb-6">
+                    <a href="#" class="text-[#4e7097] hover:text-[#0e141b] transition duration-300">About</a>
+                    <a href="#" class="text-[#4e7097] hover:text-[#0e141b] transition duration-300">Contact</a>
+                    <a href="#" class="text-[#4e7097] hover:text-[#0e141b] transition duration-300">Privacy Policy</a>
+                    <a href="#" class="text-[#4e7097] hover:text-[#0e141b] transition duration-300">Terms of Service</a>
+                </div>
+                <p class="text-[#4e7097]">@2024 CampusConnect. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Datos de cursos (de tu base de datos)
+        const cursos = [
+            { ID_Curso: '100', Nombre_Curso: 'Cálculo Diferencial', Descripción: 'Cálculo de funciones, límites y derivadas', Créditos: '5' },
+            { ID_Curso: '101', Nombre_Curso: 'Contabilidad Financiera', Descripción: 'Análisis de la información financiera', Créditos: '5' },
+            { ID_Curso: '102', Nombre_Curso: 'Marketing Digital', Descripción: 'Promoción en entornos digitales', Créditos: '6' },
+            { ID_Curso: '103', Nombre_Curso: 'Diseño gráfico', Descripción: 'Creación de arte visual digital', Créditos: '5' },
+            { ID_Curso: '104', Nombre_Curso: 'Fundamentos de programación', Descripción: 'Escritura de código en lenguajes de programación', Créditos: '5' },
+            { ID_Curso: '105', Nombre_Curso: 'Economía General', Descripción: 'Conceptos básicos de economía', Créditos: '5' },
+            { ID_Curso: '106', Nombre_Curso: 'Teoría del Derecho', Descripción: 'Conceptos fundamentales sobre derecho', Créditos: '6' },
+            { ID_Curso: '107', Nombre_Curso: 'Microbiología General', Descripción: 'Estudio de los microorganismos', Créditos: '6' },
+            { ID_Curso: '108', Nombre_Curso: 'Geotecnia', Descripción: 'Comportamiento del suelo', Créditos: '5' },
+            { ID_Curso: '109', Nombre_Curso: 'Fisiología Vegetal', Descripción: 'Estudio de las funciones vitales de las plantas', Créditos: '5' },
+            { ID_Curso: '110', Nombre_Curso: 'Química Orgánica', Descripción: 'Estudio de compuestos con carbono y sus reacciones', Créditos: '4' },
+            { ID_Curso: '111', Nombre_Curso: 'Estadística Aplicada', Descripción: 'Métodos estadísticos para tomar decisiones basadas en datos', Créditos: '6' },
+            { ID_Curso: '112', Nombre_Curso: 'Periodismo de Investigación', Descripción: 'Creación de reportajes periodísticos', Créditos: '6' },
+            { ID_Curso: '113', Nombre_Curso: 'Teoría de la Comunicación', Descripción: 'Modelos y procesos comunicativos', Créditos: '4' },
+            { ID_Curso: '114', Nombre_Curso: 'Legislación laboral', Descripción: 'Normas legales que regulan las relaciones laborales', Créditos: '6' }
+        ];
+        
+        // Datos simulados de empresas y puestos
+        const empresas = [
+            { 
+                RUC: "20123456789", 
+                Nombre_Empresa: "Tech Solutions Inc.",
+                Email_Contacto: "contact@techsolutions.com",
+                Direccion_Empresa: "Av. Central 123, Of. 401, Lima",
+                Logo: "https://lh3.googleusercontent.com/aida-public/AB6AXuCrX80WpVSlPgHp295jxLKTeRVfN_jip3_uOrAxwit_SRg3sti_kfNQA1vpPfdCM676G3kxnvUk9Znsgl-g4UsYOllCP4VgsVlOlxZ5RYBG6GkkUpV7Eid1njT3Y1v55g-YF1TMXPi3sdLaQeJrUO6xSQjiBMYtt93ZgTsmPzHEx33buPlWifjPFMUWBKAtjzQHX0aqMKxA0iquNKyEqxDO-BzqlyJ93kCGkUgwQlO1s7ujWAViWtE05Z9N6Kk6WCtcPGMFwfio0S2S"
+            },
+            { 
+                RUC: "20987654321", 
+                Nombre_Empresa: "Global Marketing Co.",
+                Email_Contacto: "info@globalmarketing.com",
+                Direccion_Empresa: "Jr. La Luna 456, Miraflores, Lima",
+                Logo: "https://lh3.googleusercontent.com/aida-public/AB6AXuCCkAFK9sSgfq96-MgAv1wptPCpN76V9vo5eQeD1BTkSUUHMpY2NcwJEgwxwLkhCN7MpEYhC1Fp60NBItsML2fPvslUvOie3AH7sbgFwRFaubZrfrTI71UGwJnq5UTH2vtnaYOx-bQYwGpQnv014ZV-wwdisM60QFkT0eT7VVEZlWFXlkSHMPD8RqLx5jNMMv6Yf4cq24PUEpPcVNyPs6J9pAaFvD-Rvc0ZfnxVf_ZCwnQexYvlTTwOeNeOINk6yxRbl3j_WF7cciO8"
+            },
+            { 
+                RUC: "20555112233", 
+                Nombre_Empresa: "Legal Advisors S.A.C.",
+                Email_Contacto: "admin@legaladvisors.com",
+                Direccion_Empresa: "Cl. El Sol 789, San Isidro, Lima",
+                Logo: "https://lh3.googleusercontent.com/aida-public/AB6AXuCpabcnix4xfAKRJjBRCMcpcrNDhTQ_5oPMYT9KQ616ZWhPjoC5WWgMX1AwOP8vuiVehdvjj0qSdx5oMAb1Mr3Z6jUcYt87tp_gljqk6hg3HB_WRJjodnHqOMGlTEpuIsSDvjy9IskjuSCBpFVqfRySgQYCmTbh9FtF4hlUWV5V0_2C90ct--rxRgYElrPXUxV-4DKZ2W6jnrqeRXdc-f-Fdkahr96_Sc4e0TW-6jWHfl5na3nrCaUYk20rjmP4951nvddje0EIxoUl"
+            },
+            { 
+                RUC: "20444009988", 
+                Nombre_Empresa: "Construction Pros",
+                Email_Contacto: "sales@constructionpros.net",
+                Direccion_Empresa: "Av. Las Rocas 101, Santiago de Surco, Lima",
+                Logo: "https://lh3.googleusercontent.com/aida-public/AB6AXuDIfYWC7chYIc-IUOVqxsNZsG1djO4xAw9wVr901cBVjMxUZY9U7u2snBrU0BYn4INK7jzgVWlKfOYEsgAW4IjWGDltke2NdA1-XO4AZCVlKciDIK5ysaa4nViXUNtN3ApGH5-MKDhKnAPmbKeLDMMk--jR-YK__gWAQhu9eCB9IQ0rILvHod46vuRFq1vMyc7si4nd9Xt6gPD6xImqvOjbk-BWj8ovuB2clL29aR0YzFkEt5pNtFxBSSlTj5K2L65pgy0-rWjEuy74"
+            },
+            { 
+                RUC: "20777334455", 
+                Nombre_Empresa: "Health Care Group",
+                Email_Contacto: "hr@healthcaregroup.org",
+                Direccion_Empresa: "Psje. Los Pinos 202, Lince, Lima",
+                Logo: "https://lh3.googleusercontent.com/aida-public/AB6AXuAgNt4Hm7qiGiLsZa0sX97VotRawccwfXH1HFSRKquDvxcMpfjd3B46U8i5fnbz3ysuNSJJRpqZ5Ughr8QO7nunV1b5H0wlt0VAhGaSGfvJwvsbcO1jy_xUwTP2X-3XVXyK5lQ-M4kxVu_3tXqrSegnW2KLTnm7ycOwUQkIha2TwYsrHuIu8vTe_P4E5X9HqBXuwqjdUNZIDc1qKT7thyWJD199GEhMuDs5DaZJ6XK_0GHzppWgnuNlnJvMfgZ1_0-nLh_XdQiRSjz1"
+            }
+        ];
+        
+        // Puestos de trabajo con requisitos de cursos
+        const puestos = [
+            { 
+                ID_Puesto: 401, 
+                Titulo_Puesto: "Desarrollador Backend", 
+                Descripción_Puesto: "Desarrollo de APIs con Java y Spring Boot para soluciones empresariales. Se requiere conocimiento en arquitectura de software y patrones de diseño.", 
+                Fecha_Publicación: "2023-10-15", 
+                Vacantes: 3,
+                RUC_Empresa: "20123456789",
+                Cursos_Requeridos: ['104', '100', '111'], // Fundamentos de programación, Cálculo, Estadística
+                Salario: "S/ 4,500 - 6,000",
+                Tipo: "Tiempo completo",
+                Modalidad: "Híbrido (Lima)"
+            },
+            { 
+                ID_Puesto: 402, 
+                Titulo_Puesto: "Asistente Legal", 
+                Descripción_Puesto: "Apoyo en investigación jurídica y documentación para casos corporativos. Preparación de documentos legales y seguimiento de procesos.", 
+                Fecha_Publicación: "2023-10-20", 
+                Vacantes: 2,
+                RUC_Empresa: "20555112233",
+                Cursos_Requeridos: ['106', '114', '105'], // Teoría del Derecho, Legislación laboral, Economía
+                Salario: "S/ 3,800 - 4,500",
+                Tipo: "Tiempo completo",
+                Modalidad: "Presencial (San Isidro)"
+            },
+            { 
+                ID_Puesto: 403, 
+                Titulo_Puesto: "Practicante de Marketing", 
+                Descripción_Puesto: "Gestión de redes sociales y campañas digitales para marcas internacionales. Análisis de métricas y participación en estrategias creativas.", 
+                Fecha_Publicación: "2023-10-10", 
+                Vacantes: 5,
+                RUC_Empresa: "20987654321",
+                Cursos_Requeridos: ['102', '103', '113'], // Marketing Digital, Diseño gráfico, Teoría Comunicación
+                Salario: "S/ 1,200 - 1,800",
+                Tipo: "Medio tiempo",
+                Modalidad: "Remoto"
+            },
+            { 
+                ID_Puesto: 404, 
+                Titulo_Puesto: "Ingeniero Civil", 
+                Descripción_Puesto: "Diseño y supervisión de proyectos de construcción residenciales y comerciales. Evaluación de terrenos y gestión de equipos de trabajo.", 
+                Fecha_Publicación: "2023-10-05", 
+                Vacantes: 1,
+                RUC_Empresa: "20444009988",
+                Cursos_Requeridos: ['108', '100', '111'], // Geotecnia, Cálculo, Estadística
+                Salario: "S/ 5,500 - 7,200",
+                Tipo: "Tiempo completo",
+                Modalidad: "Presencial (Santiago de Surco)"
+            },
+            { 
+                ID_Puesto: 405, 
+                Titulo_Puesto: "Enfermero/a", 
+                Descripción_Puesto: "Cuidado de pacientes en turnos rotativos en clínica privada. Administración de medicamentos y seguimiento de historias clínicas.", 
+                Fecha_Publicación: "2023-10-18", 
+                Vacantes: 4,
+                RUC_Empresa: "20777334455",
+                Cursos_Requeridos: ['107', '110', '109'], // Microbiología, Química Orgánica, Fisiología Vegetal
+                Salario: "S/ 3,200 - 4,000",
+                Tipo: "Tiempo completo",
+                Modalidad: "Presencial (Lince)"
+            }
+        ];
+        
+        // Función para obtener el nombre del curso por su ID
+        function getNombreCurso(idCurso) {
+            const curso = cursos.find(c => c.ID_Curso === idCurso);
+            return curso ? curso.Nombre_Curso : 'Curso no encontrado';
+        }
+        
+        // Función para obtener datos de empresa por RUC
+        function getEmpresa(ruc) {
+            return empresas.find(e => e.RUC === ruc) || { 
+                Nombre_Empresa: "Empresa no especificada",
+                Logo: "https://via.placeholder.com/150"
+            };
+        }
+        
+        // Función para renderizar las ofertas de trabajo
+        function renderJobs(jobsToRender = puestos) {
+            const jobListings = document.getElementById('job-listings');
+            jobListings.innerHTML = '';
+            
+            if (jobsToRender.length === 0) {
+                jobListings.innerHTML = `
+                    <div class="col-span-full text-center py-10">
+                        <p class="text-[#4e7097] text-lg">No se encontraron ofertas que coincidan con los filtros seleccionados.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            jobsToRender.forEach(puesto => {
+                const empresa = getEmpresa(puesto.RUC_Empresa);
+                
+                const jobCard = document.createElement('div');
+                jobCard.className = 'job-card bg-white rounded-lg overflow-hidden';
+                
+                // Crear lista de cursos requeridos
+                let cursosRequeridosHTML = '';
+                if (puesto.Cursos_Requeridos && puesto.Cursos_Requeridos.length > 0) {
+                    cursosRequeridosHTML = `
+                        <div class="px-4 pb-3">
+                            <h4 class="text-sm font-semibold text-[#4e7097] mb-2">Cursos requeridos:</h4>
+                            <div class="flex flex-wrap gap-2">
+                                ${puesto.Cursos_Requeridos.map(id => `
+                                    <span class="course-badge">${getNombreCurso(id)}</span>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                jobCard.innerHTML = `
+                    <div class="flex items-center gap-4 p-4 border-b border-[#e7edf3]">
+                        <div class="w-16 h-16 bg-center bg-no-repeat bg-cover rounded-lg" style="background-image: url('${empresa.Logo}')"></div>
+                        <div>
+                            <h3 class="text-lg font-bold text-[#0e141b]">${puesto.Titulo_Puesto}</h3>
+                            <p class="text-sm text-[#4e7097]">${empresa.Nombre_Empresa}</p>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex justify-between text-sm text-[#4e7097] mb-3">
+                            <span>${puesto.Fecha_Publicación}</span>
+                            <span>${puesto.Vacantes} vacante(s)</span>
+                        </div>
+                        <p class="text-[#4e7097] text-sm mb-4">${puesto.Descripción_Puesto}</p>
+                        
+                        <div class="grid grid-cols-2 gap-3 text-sm mb-4">
+                            <div>
+                                <p class="text-[#4e7097]">Salario:</p>
+                                <p class="font-medium">${puesto.Salario}</p>
+                            </div>
+                            <div>
+                                <p class="text-[#4e7097]">Tipo:</p>
+                                <p class="font-medium">${puesto.Tipo}</p>
+                            </div>
+                            <div>
+                                <p class="text-[#4e7097]">Modalidad:</p>
+                                <p class="font-medium">${puesto.Modalidad}</p>
+                            </div>
+                        </div>
+                        
+                        ${cursosRequeridosHTML}
+                        
+                        <button class="w-full mt-4 bg-[#3498db] text-white py-2 px-4 rounded-lg hover:bg-[#2980b9] transition duration-300 btn-apply" data-job-id="${puesto.ID_Puesto}">
+                            Aplicar ahora
+                        </button>
+                    </div>
+                `;
+                
+                jobListings.appendChild(jobCard);
+            });
+            
+            // Agregar event listeners a los botones
+            document.querySelectorAll('.btn-apply').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    openApplyModal(this.getAttribute('data-job-id'));
+                });
+            });
+        }
+        
+        // Función para abrir el modal de aplicación
+        function openApplyModal(jobId) {
+            const modal = document.getElementById('apply-modal');
+            const job = puestos.find(p => p.ID_Puesto == jobId);
+            
+            document.getElementById('modal-job-title').textContent = job.Titulo_Puesto;
+            modal.classList.remove('hidden');
+        }
+        
+        // Función para cerrar el modal
+        function closeModal() {
+            document.getElementById('apply-modal').classList.add('hidden');
+        }
+        
+        // Función para filtrar trabajos
+        function filterJobs() {
+            const fieldFilter = document.getElementById('filter-field').value.toLowerCase();
+            const companyFilter = document.getElementById('filter-company').value;
+            const courseFilter = document.getElementById('filter-course').value;
+            const searchFilter = document.getElementById('search-jobs').value.toLowerCase();
+            
+            const filtered = puestos.filter(puesto => {
+                const empresa = getEmpresa(puesto.RUC_Empresa);
+                
+                const matchesField = !fieldFilter || 
+                    puesto.Titulo_Puesto.toLowerCase().includes(fieldFilter) || 
+                    puesto.Descripción_Puesto.toLowerCase().includes(fieldFilter);
+                
+                const matchesCompany = !companyFilter || 
+                    empresa.Nombre_Empresa === companyFilter;
+                
+                const matchesCourse = !courseFilter || 
+                    (puesto.Cursos_Requeridos && puesto.Cursos_Requeridos.includes(courseFilter));
+                
+                const matchesSearch = !searchFilter || 
+                    puesto.Titulo_Puesto.toLowerCase().includes(searchFilter) || 
+                    puesto.Descripción_Puesto.toLowerCase().includes(searchFilter) || 
+                    empresa.Nombre_Empresa.toLowerCase().includes(searchFilter) ||
+                    (puesto.Cursos_Requeridos && puesto.Cursos_Requeridos.some(id => 
+                        getNombreCurso(id).toLowerCase().includes(searchFilter)));
+                
+                return matchesField && matchesCompany && matchesCourse && matchesSearch;
+            });
+            
+            renderJobs(filtered);
+        }
+        
+        // Event listeners
+        document.querySelector('.close-modal').addEventListener('click', closeModal);
+        document.getElementById('filter-field').addEventListener('change', filterJobs);
+        document.getElementById('filter-company').addEventListener('change', filterJobs);
+        document.getElementById('filter-course').addEventListener('change', filterJobs);
+        document.getElementById('search-jobs').addEventListener('input', filterJobs);
+        
+        document.getElementById('application-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Aquí iría la lógica para enviar la aplicación
+            alert('¡Aplicación enviada con éxito!');
+            closeModal();
+        });
+        
+        // Cerrar modal al hacer clic fuera del contenido
+        document.getElementById('apply-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+        
+        // Cargar trabajos al inicio
+        renderJobs();
+    </script>
+</body>
+</html>
