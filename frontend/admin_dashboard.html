@@ -1,20 +1,52 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Panel del Administrador</title>
+  <link rel="stylesheet" href="styles-ad.css"></link>
 </head>
 <body>
-  <h1>Bienvenido, administrador</h1>
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const role = localStorage.getItem('userRole');
-        if (role !== 'admin') {
-            alert('Acceso denegado. Solo para administradores.');
-            window.location.href = 'login.html';
-        }
-    });
-    </script>
+  <h1>Panel de Administración</h1>
 
+  <section>
+    <h2>Empresas</h2>
+    <form id="empresa-form">
+      <input name="nombre" placeholder="Nombre de empresa" required>
+      <input name="direccion" placeholder="Dirección" required>
+      <input name="telefono" placeholder="Teléfono" required>
+      <input name="email" placeholder="Email" required>
+      <button type="submit">Añadir Empresa</button>
+    </form>
+
+    <table id="empresa-table">
+      <thead>
+        <tr>
+          <th>ID</th><th>Nombre</th><th>Dirección</th><th>Teléfono</th><th>Email</th><th>Acción</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Puestos</h2>
+    <form id="puesto-form">
+      <input name="nombre" placeholder="Nombre del puesto" required>
+      <textarea name="descripcion" placeholder="Descripción" required></textarea>
+      <input name="id_empresa" placeholder="ID Empresa" required>
+      <button type="submit">Añadir Puesto</button>
+    </form>
+
+    <table id="puesto-table">
+      <thead>
+        <tr>
+          <th>ID</th><th>Nombre</th><th>Descripción</th><th>ID Empresa</th><th>Acción</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </section>
+
+  <script src="script-admin.js"></script>
 </body>
 </html>
