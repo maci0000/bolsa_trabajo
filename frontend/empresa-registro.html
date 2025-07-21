@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Empresas</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        .form-section {
+            margin-bottom: 40px;
+            padding: 25px;
+            background-color: #f1f8fe;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #34495e;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            transition: border 0.3s;
+        }
+        input:focus {
+            border-color: #3498db;
+            outline: none;
+            box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+            margin-top: 10px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        .required:after {
+            content: " *";
+            color: #e74c3c;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 30px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.05);
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #3498db;
+            color: white;
+            position: sticky;
+            top: 0;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        tr:hover {
+            background-color: #e3f2fd;
+        }
+        .actions {
+            display: flex;
+            gap: 5px;
+        }
+        .edit-btn {
+            background-color: #f39c12;
+        }
+        .delete-btn {
+            background-color: #e74c3c;
+        }
+        .edit-btn:hover {
+            background-color: #d35400;
+        }
+        .delete-btn:hover {
+            background-color: #c0392b;
+        }
+        .registered-section {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+        .table-responsive {
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Registro de Empresas</h1>
+        
+        <div class="form-section">
+            <form id="empresaForm">
+                <div class="form-group">
+                    <label for="nombre_empresa" class="required">Nombre de empresa</label>
+                    <input type="text" id="nombre_empresa" name="nombre_empresa" required placeholder="Ingrese el nombre comercial">
+                </div>
+                
+                <div class="form-group">
+                    <label for="email" class="required">Email</label>
+                    <input type="email" id="email" name="email" required placeholder="correo@empresa.com">
+                </div>
+                
+                <div class="form-group">
+                    <label for="telefono" class="required">Teléfono</label>
+                    <input type="tel" id="telefono" name="telefono" required placeholder="Número de contacto">
+                </div>
+                
+                <div class="form-group">
+                    <label for="ruc" class="required">RUC</label>
+                    <input type="text" id="ruc" name="ruc" required placeholder="Ingrese el RUC de la empresa">
+                </div>
+                
+                <div class="form-group">
+                    <label for="razon_social" class="required">Razón Social</label>
+                    <input type="text" id="razon_social" name="razon_social" required placeholder="Nombre legal de la empresa">
+                </div>
+                
+                <div class="form-group">
+                    <label for="direccion_fiscal" class="required">Dirección Fiscal</label>
+                    <input type="text" id="direccion_fiscal" name="direccion_fiscal" required placeholder="Dirección registrada en SUNAT">
+                </div>
+                
+                <div class="form-group">
+                    <label for="direccion_empresa">Dirección Empresa</label>
+                    <input type="text" id="direccion_empresa" name="direccion_empresa" placeholder="Dirección física (si es diferente a la fiscal)">
+                </div>
+                
+                <div class="form-group">
+                    <label for="fecha_registro">Fecha Registro</label>
+                    <input type="date" id="fecha_registro" name="fecha_registro">
+                </div>
+                
+                <button type="submit" id="submitBtn">Registrar Empresa</button>
+                <input type="hidden" id="editIndex" value="-1">
+            </form>
+        </div>
+        
+        <div class="registered-section">
+            <h2>Empresas Registradas</h2>
+            <div class="table-responsive">
+                <table id="empresasTable">
+                    <thead>
+                        <tr>
+                            <th>Nombre de empresa</th>
+                            <th>Email</th>
+                            <th>Teléfono</th>
+                            <th>RUC</th>
+                            <th>Razón Social</th>
+                            <th>Dirección Fiscal</th>
+                            <th>Dirección Empresa</th>
+                            <th>Fecha Registro</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="empresasBody">
+                        <!-- Los datos se insertarán aquí dinámicamente -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Array para almacenar las empresas
+        let empresas = [];
+        
+        // Cargar datos guardados al iniciar
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedData = localStorage.getItem('empresasData');
+            if (savedData) {
+                empresas = JSON.parse(savedData);
+                renderTable();
+            }
+        });
+        
+        // Manejar el envío del formulario
+        document.getElementById('empresaForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const editIndex = parseInt(document.getElementById('editIndex').value);
+            const empresaData = {
+                nombre_empresa: document.getElementById('nombre_empresa').value,
+                email: document.getElementById('email').value,
+                telefono: document.getElementById('telefono').value,
+                ruc: document.getElementById('ruc').value,
+                razon_social: document.getElementById('razon_social').value,
+                direccion_fiscal: document.getElementById('direccion_fiscal').value,
+                direccion_empresa: document.getElementById('direccion_empresa').value,
+                fecha_registro: document.getElementById('fecha_registro').value || new Date().toISOString().split('T')[0]
+            };
+            
+            if (editIndex >= 0) {
+                // Editar empresa existente
+                empresas[editIndex] = empresaData;
+                document.getElementById('editIndex').value = "-1";
+                document.getElementById('submitBtn').textContent = "Registrar Empresa";
+            } else {
+                // Agregar nueva empresa
+                empresas.push(empresaData);
+            }
+            
+            // Guardar en localStorage
+            localStorage.setItem('empresasData', JSON.stringify(empresas));
+            
+            // Actualizar la tabla
+            renderTable();
+            
+            // Limpiar el formulario
+            this.reset();
+            
+            // Mostrar mensaje
+            alert(editIndex >= 0 ? "Empresa actualizada con éxito!" : "Empresa registrada con éxito!");
+        });
+        
+        // Función para renderizar la tabla
+        function renderTable() {
+            const tbody = document.getElementById('empresasBody');
+            tbody.innerHTML = '';
+            
+            empresas.forEach((empresa, index) => {
+                const row = document.createElement('tr');
+                
+                row.innerHTML = `
+                    <td>${empresa.nombre_empresa}</td>
+                    <td>${empresa.email}</td>
+                    <td>${empresa.telefono}</td>
+                    <td>${empresa.ruc}</td>
+                    <td>${empresa.razon_social}</td>
+                    <td>${empresa.direccion_fiscal}</td>
+                    <td>${empresa.direccion_empresa || '-'}</td>
+                    <td>${empresa.fecha_registro}</td>
+                    <td class="actions">
+                        <button class="edit-btn" onclick="editEmpresa(${index})">Editar</button>
+                        <button class="delete-btn" onclick="deleteEmpresa(${index})">Eliminar</button>
+                    </td>
+                `;
+                
+                tbody.appendChild(row);
+            });
+        }
+        
+        // Función para editar una empresa
+        window.editEmpresa = function(index) {
+            const empresa = empresas[index];
+            
+            document.getElementById('nombre_empresa').value = empresa.nombre_empresa;
+            document.getElementById('email').value = empresa.email;
+            document.getElementById('telefono').value = empresa.telefono;
+            document.getElementById('ruc').value = empresa.ruc;
+            document.getElementById('razon_social').value = empresa.razon_social;
+            document.getElementById('direccion_fiscal').value = empresa.direccion_fiscal;
+            document.getElementById('direccion_empresa').value = empresa.direccion_empresa || '';
+            document.getElementById('fecha_registro').value = empresa.fecha_registro;
+            
+            document.getElementById('editIndex').value = index;
+            document.getElementById('submitBtn').textContent = "Actualizar Empresa";
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+        
+        // Función para eliminar una empresa
+        window.deleteEmpresa = function(index) {
+            if (confirm('¿Estás seguro de que deseas eliminar esta empresa?')) {
+                empresas.splice(index, 1);
+                localStorage.setItem('empresasData', JSON.stringify(empresas));
+                renderTable();
+                alert('Empresa eliminada con éxito');
+            }
+        };
+    </script>
+</body>
+</html>
