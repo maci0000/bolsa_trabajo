@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (result.role.trim() === 'admin') {
                 window.location.href = 'admin_dashboard.html';
             } else if (result.role.trim() === 'postulante') {
-                window.location.href = 'postulante_dashboard.html';
+                window.location.href = 'postulante-registro.html';
             } else {
                 alert('Rol no válido');
                 window.location.href = 'index.html';

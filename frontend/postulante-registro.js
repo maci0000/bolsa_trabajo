@@ -1,18 +1,18 @@
 document.addEventListener('DOMContentLoaded', () => {
     const universidadSelect = document.getElementById('universidad');
-    const postulanteForm = document.getElementById('postulante-form');
 
-    // Función para cargar las universidades desde el backend
     async function loadUniversidades() {
         try {
-            // Asume que tu backend tiene un endpoint para obtener universidades
-            const response = await fetch('http://localhost:3000/api/universidades'); // Ajusta la URL de tu backend
+            const response = await fetch('http://localhost/bolsa_trabajo/backend/universidades.php'); // ✅ asegúrate de que esta ruta sea correcta
+
             if (!response.ok) {
                 throw new Error('Error al cargar las universidades');
             }
+
             const universidades = await response.json();
 
-            universidadSelect.innerHTML = '<option value="">Selecciona tu Universidad</option>'; // Reiniciar opciones
+            // Limpiar y agregar opciones
+            universidadSelect.innerHTML = '<option value="">Selecciona tu Universidad</option>';
             universidades.forEach(uni => {
                 const option = document.createElement('option');
                 option.value = uni.ID_Universidad;
@@ -25,8 +25,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Cargar universidades al cargar la página
+    // Cargar al abrir la página
     loadUniversidades();
+});
 
     // Manejar el envío del formulario
     postulanteForm.addEventListener('submit', async (event) => {
@@ -85,4 +86,3 @@ document.addEventListener('DOMContentLoaded', () => {
             alert('Error de conexión. Inténtalo de nuevo más tarde.');
         }
     });
-});
