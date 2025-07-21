@@ -30,8 +30,8 @@ async function cargarEmpresas() {
       <td>${emp.ID_Empresa}</td>
       <td>${emp.Nombre_Empresa}</td>
       <td>${emp.Direccion_Empresa}</td>
-      <td>${emp.Telefono_Empresa}</td>
-      <td>${emp.Email_Empresa}</td>
+      <td>${emp.Telefono_Contacto}</td>
+      <td>${emp.Email_Contacto}</td>
       <td><button onclick="eliminarEmpresa(${emp.ID_Empresa})">Eliminar</button></td>
     `;
     tbody.appendChild(tr);
@@ -47,9 +47,9 @@ async function cargarPuestos() {
     const tr = document.createElement("tr");
     tr.innerHTML = `
       <td>${p.ID_Puesto}</td>
-      <td>${p.Nombre_Puesto}</td>
-      <td>${p.Descripcion_Puesto}</td>
-      <td>${p.ID_Empresa}</td>
+      <td>${p.Titulo_Puesto}</td>
+      <td>${p.Descripción_Puesto}</td>
+      <td>${p.Fecha_Publicación}</td>
       <td><button onclick="eliminarPuesto(${p.ID_Puesto})">Eliminar</button></td>
     `;
     tbody.appendChild(tr);
