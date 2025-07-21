@@ -55,7 +55,7 @@ CREATE TABLE PUESTO_TRABAJO (
 
 -- Tabla VACANTE
 CREATE TABLE VACANTE (
-    ID_Vacante INT(11) NOT NULL PRIMARY KEY,
+    ID_Vacante NT PRIMARY KEY AUTO_INCREMENT,
     Fecha_Postulación DATE NOT NULL,
     Estado_Postulación VARCHAR(40) NOT NULL,
     ID_Postulante INT(11) NOT NULL,
@@ -120,11 +120,14 @@ select Nombre_Universidad from universidad where Dirección_Universidad like '%C
 select Nombre_Universidad from universidad where Dirección_Universidad like '%La Molina%';
 select Nombre_Universidad from universidad where Nombre_Universidad like '%Nacional%';
 
-INSERT INTO POSTULANTE values (1, 'Ingeniería', 2020, 'Juan', 'Pérez', 'juan.perez@email.com', '+1234567890', 301);
-INSERT INTO POSTULANTE values (2, 'Medicina', 2019, 'María', 'Gómez', 'maria.gomez@email.com', '+9876543210', 301);
-INSERT INTO POSTULANTE values (3, 'Derecho', 2021, 'Carlos', 'López', 'carlos.lopez@email.com', '+1122334455', 302);
-INSERT INTO POSTULANTE values (4, 'Administración', 2020, 'Ana', 'Martínez', 'ana.martinez@email.com', '+5566778899', 303);
-INSERT INTO POSTULANTE values (5, 'Arquitectura', 2018, 'Luisa', 'Rodríguez', 'luisa.rodriguez@email.com', '+9988776655', 302);
+INSERT INTO POSTULANTE 
+(ID_Postulante, Carrera, Año_Ingreso, Nombre, Apellido, Email_Estudiante, Teléfono_Estudiante, ID_Universidad, rol, password_hash)
+VALUES 
+(1, 'Ingeniería', 2020, 'Juan', 'Pérez', 'juan.perez@email.com', '+1234567890', 301, 'postulante', '$2y$10$ejemploDeHash12345678901234567890'),
+(2, 'Medicina', 2019, 'María', 'Gómez', 'maria.gomez@email.com', '+9876543210', 301, 'postulante', '$2y$10$ejemploDeHash12345678901234567890'),
+(3, 'Derecho', 2021, 'Carlos', 'López', 'carlos.lopez@email.com', '+1122334455', 302, 'postulante', '$2y$10$ejemploDeHash12345678901234567890'),
+(4, 'Administración', 2020, 'Ana', 'Martínez', 'ana.martinez@email.com', '+5566778899', 303, 'postulante', '$2y$10$ejemploDeHash12345678901234567890'),
+(5, 'Arquitectura', 2018, 'Luisa', 'Rodríguez', 'luisa.rodriguez@email.com', '+9988776655', 302, 'postulante', '$2y$10$ejemploDeHash12345678901234567890');
 
 INSERT INTO PUESTO_TRABAJO (ID_Puesto, Titulo_Puesto, Descripción_Puesto, Fecha_Publicación, Vacantes) VALUES
 (401, 'Desarrollador Backend', 'Desarrollo de APIs con Java y Spring Boot', '2023-10-15', 3),
@@ -156,8 +159,8 @@ INSERT INTO VACANTE (ID_Vacante, Fecha_Postulación, Estado_Postulación, ID_Pos
 
 -- Datos para la tabla EMPRESA
 INSERT INTO Empresa (Nombre_Empresa, Email_Contacto, Telefono_Contacto, RUC, Razon_social, Direccion_Fiscal, Direccion_Empresa, Contrasena_Hash, Fecha_Registro) VALUES
-('Tech Solutions Inc.', 'contact@techsolutions.com', '123456789', '20123456789', 'Sociedad Anonima Cerrada', 'Av. Central 123', 'Av. Central 123, Of. 401, Lima', 'a_hashed_password_1', '2023-01-15'),
-('Global Marketing Co.', 'info@globalmarketing.com', '987654321', '20987654321', 'Sociedad Anonima', 'Jr. La Luna 456', 'Jr. La Luna 456, Miraflores, Lima', 'a_hashed_password_2', '2022-11-20'),
-('Legal Advisors S.A.C.', 'admin@legaladvisors.com', '555112233', '20555112233', 'Sociedad Anonima Cerrada', 'Cl. El Sol 789', 'Cl. El Sol 789, San Isidro, Lima', 'a_hashed_password_3', '2023-03-01'),
-('Construction Pros', 'sales@constructionpros.net', '444009988', '20444009988', 'Sociedad Comercial de Responsabilidad Limitada', 'Av. Las Rocas 101', 'Av. Las Rocas 101, Santiago de Surco, Lima', 'a_hashed_password_4', '2022-09-10'),
-('Health Care Group', 'hr@healthcaregroup.org', '777334455', '20777334455', 'Asociacion Civil', 'Psje. Los Pinos 202', 'Psje. Los Pinos 202, Lince, Lima', 'a_hashed_password_5', '2023-02-28');
+('Tech Solutions Inc.', 'contact@techsolutions.com', '123456789', '20123456789', 'S.A.C.', 'Av. Central 123', 'Av. Central 123, Of. 401, Lima', 'a_hashed_password_1', '2023-01-15'),
+('Global Marketing Co.', 'info@globalmarketing.com', '987654321', '20987654321', 'S.A.', 'Jr. La Luna 456', 'Jr. La Luna 456, Miraflores, Lima', 'a_hashed_password_2', '2022-11-20'),
+('Legal Advisors S.A.C.', 'admin@legaladvisors.com', '555112233', '20555112233', 'S.A.C.', 'Cl. El Sol 789', 'Cl. El Sol 789, San Isidro, Lima', 'a_hashed_password_3', '2023-03-01'),
+('Construction Pros', 'sales@constructionpros.net', '444009988', '20444009988', 'S.R.L.', 'Av. Las Rocas 101', 'Av. Las Rocas 101, Santiago de Surco, Lima', 'a_hashed_password_4', '2022-09-10'),
+('Health Care Group', 'hr@healthcaregroup.org', '777334455', '20777334455', 'A.C.', 'Psje. Los Pinos 202', 'Psje. Los Pinos 202, Lince, Lima', 'a_hashed_password_5', '2023-02-28');
