@@ -3,10 +3,10 @@ include 'conexion.php';
 
 $nombre = $_POST['nombre'];
 $descripcion = $_POST['descripcion'];
-$id_empresa = $_POST['id_empresa'];
+$fecha_pub = $_POST['fecha_pub'];
 
-$sql = "INSERT INTO PUESTO (Nombre_Puesto, Descripcion_Puesto, ID_Empresa)
-        VALUES ('$nombre', '$descripcion', '$id_empresa')";
+$sql = "INSERT INTO PUESTO_TRABAJO (Titulo_Puesto, Descripción_Puesto, Fecha_Publicación)
+        VALUES ('$nombre', '$descripcion', '$fecha_pub')";
 
 if ($conexion->query($sql)) {
     echo "Puesto guardado correctamente.";

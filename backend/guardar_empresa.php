@@ -6,7 +6,7 @@ $direccion = $_POST['direccion'];
 $telefono = $_POST['telefono'];
 $email = $_POST['email'];
 
-$sql = "INSERT INTO EMPRESA (Nombre_Empresa, Direccion_Empresa, Telefono_Empresa, Email_Empresa)
+$sql = "INSERT INTO EMPRESA (Nombre_Empresa, Direccion_Empresa, Telefono_Contacto, Email_Contacto)
         VALUES ('$nombre', '$direccion', '$telefono', '$email')";
 
 if ($conexion->query($sql)) {
