@@ -17,6 +17,7 @@
             padding: 30px;
             border-radius: 10px;
             box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            position: relative;
         }
         h1 {
             color: #2c3e50;
@@ -41,7 +42,7 @@
             font-weight: bold;
             color: #34495e;
         }
-        input, select {
+        input, select, textarea {
             width: 100%;
             padding: 10px;
             box-sizing: border-box;
@@ -50,7 +51,11 @@
             font-size: 16px;
             transition: border 0.3s;
         }
-        input:focus {
+        textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+        input:focus, select:focus, textarea:focus {
             border-color: #3498db;
             outline: none;
             box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
@@ -63,8 +68,6 @@
             border-radius: 4px;
             cursor: pointer;
             font-size: 16px;
-            width: 100%;
-            margin-top: 10px;
             transition: background-color 0.3s;
         }
         button:hover {
@@ -103,15 +106,24 @@
         }
         .edit-btn {
             background-color: #f39c12;
+            width: auto;
         }
         .delete-btn {
             background-color: #e74c3c;
+            width: auto;
+        }
+        .details-btn {
+            background-color: #2ecc71;
+            width: auto;
         }
         .edit-btn:hover {
             background-color: #d35400;
         }
         .delete-btn:hover {
             background-color: #c0392b;
+        }
+        .details-btn:hover {
+            background-color: #27ae60;
         }
         .registered-section {
             margin-top: 40px;
@@ -124,6 +136,23 @@
         }
         .table-responsive {
             overflow-x: auto;
+        }
+        .back-btn {
+            display: block;
+            width: 200px;
+            margin: 30px auto 0;
+            background-color: #7f8c8d;
+        }
+        .back-btn:hover {
+            background-color: #95a5a6;
+        }
+        .cursos-requeridos {
+            max-width: 200px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .submit-btn {
+            width: 100%;
         }
     </style>
 </head>
@@ -141,6 +170,11 @@
                 <div class="form-group">
                     <label for="email" class="required">Email</label>
                     <input type="email" id="email" name="email" required placeholder="correo@empresa.com">
+                </div>
+                
+                <div class="form-group">
+                    <label for="contraseña" class="required">Contraseña</label>
+                    <input type="password" id="contraseña" name="contraseña" required placeholder="Ingrese una contraseña">
                 </div>
                 
                 <div class="form-group">
@@ -169,17 +203,38 @@
                 </div>
                 
                 <div class="form-group">
+                    <label for="tipo_empresa" class="required">Tipo de Empresa</label>
+                    <select id="tipo_empresa" name="tipo_empresa" required>
+                        <option value="">Seleccione un tipo</option>
+                        <option value="temporal">Temporal</option>
+                        <option value="desarrollo">Desarrollo</option>
+                        <option value="legal">Legal</option>
+                        <option value="marketing">Marketing</option>
+                        <option value="ingenieria">Ingeniería</option>
+                        <option value="salud">Salud</option>
+                    </select>
+                </div>
+                
+                <!-- Nuevo campo para cursos requeridos -->
+                <div class="form-group">
+                    <label for="cursos_requeridos">Cursos requeridos para estudiantes</label>
+                    <textarea id="cursos_requeridos" name="cursos_requeridos" placeholder="Liste los cursos necesarios para que un estudiante pueda trabajar en su empresa (separados por comas o puntos)"></textarea>
+                    <small>Ejemplo: Programación básica, Inglés técnico, Marketing digital</small>
+                </div>
+                
+                <div class="form-group">
                     <label for="fecha_registro">Fecha Registro</label>
                     <input type="date" id="fecha_registro" name="fecha_registro">
                 </div>
                 
-                <button type="submit" id="submitBtn">Registrar Empresa</button>
+                <button type="submit" id="submitBtn" class="submit-btn">Registrar Empresa</button>
                 <input type="hidden" id="editIndex" value="-1">
             </form>
         </div>
         
         <div class="registered-section">
             <h2>Empresas Registradas</h2>
+            <p>Las empresas que registro se mostraran a continuación, se le comunicará a través del correo o por celular para más información y poder registrarlas en nuestra página principal.</p>
             <div class="table-responsive">
                 <table id="empresasTable">
                     <thead>
@@ -188,10 +243,8 @@
                             <th>Email</th>
                             <th>Teléfono</th>
                             <th>RUC</th>
-                            <th>Razón Social</th>
-                            <th>Dirección Fiscal</th>
-                            <th>Dirección Empresa</th>
-                            <th>Fecha Registro</th>
+                            <th>Tipo</th>
+                            <th>Cursos Requeridos</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
@@ -201,6 +254,9 @@
                 </table>
             </div>
         </div>
+
+        <!-- Botón para regresar a la página principal - AHORA AL FINAL Y CENTRADO -->
+        <button class="back-btn" onclick="window.location.href='http://127.0.0.1:5500/frontend/index.html'">Volver a la página principal</button>
     </div>
 
     <script>
@@ -224,11 +280,14 @@
             const empresaData = {
                 nombre_empresa: document.getElementById('nombre_empresa').value,
                 email: document.getElementById('email').value,
+                contraseña: document.getElementById('contraseña').value,
                 telefono: document.getElementById('telefono').value,
                 ruc: document.getElementById('ruc').value,
                 razon_social: document.getElementById('razon_social').value,
                 direccion_fiscal: document.getElementById('direccion_fiscal').value,
                 direccion_empresa: document.getElementById('direccion_empresa').value,
+                tipo_empresa: document.getElementById('tipo_empresa').value,
+                cursos_requeridos: document.getElementById('cursos_requeridos').value,
                 fecha_registro: document.getElementById('fecha_registro').value || new Date().toISOString().split('T')[0]
             };
             
@@ -268,18 +327,30 @@
                     <td>${empresa.email}</td>
                     <td>${empresa.telefono}</td>
                     <td>${empresa.ruc}</td>
-                    <td>${empresa.razon_social}</td>
-                    <td>${empresa.direccion_fiscal}</td>
-                    <td>${empresa.direccion_empresa || '-'}</td>
-                    <td>${empresa.fecha_registro}</td>
+                    <td>${getTipoEmpresaText(empresa.tipo_empresa)}</td>
+                    <td class="cursos-requeridos">${empresa.cursos_requeridos || 'No especificado'}</td>
                     <td class="actions">
                         <button class="edit-btn" onclick="editEmpresa(${index})">Editar</button>
                         <button class="delete-btn" onclick="deleteEmpresa(${index})">Eliminar</button>
+                        <button class="details-btn" onclick="showDetails(${index})">Detalles</button>
                     </td>
                 `;
                 
                 tbody.appendChild(row);
             });
+        }
+        
+        // Función para obtener el texto del tipo de empresa
+        function getTipoEmpresaText(value) {
+            const tipos = {
+                'temporal': 'Temporal',
+                'desarrollo': 'Desarrollo',
+                'legal': 'Legal',
+                'marketing': 'Marketing',
+                'ingenieria': 'Ingeniería',
+                'salud': 'Salud'
+            };
+            return tipos[value] || value;
         }
         
         // Función para editar una empresa
@@ -288,11 +359,14 @@
             
             document.getElementById('nombre_empresa').value = empresa.nombre_empresa;
             document.getElementById('email').value = empresa.email;
+            document.getElementById('contraseña').value = empresa.contraseña;
             document.getElementById('telefono').value = empresa.telefono;
             document.getElementById('ruc').value = empresa.ruc;
             document.getElementById('razon_social').value = empresa.razon_social;
             document.getElementById('direccion_fiscal').value = empresa.direccion_fiscal;
             document.getElementById('direccion_empresa').value = empresa.direccion_empresa || '';
+            document.getElementById('tipo_empresa').value = empresa.tipo_empresa;
+            document.getElementById('cursos_requeridos').value = empresa.cursos_requeridos || '';
             document.getElementById('fecha_registro').value = empresa.fecha_registro;
             
             document.getElementById('editIndex').value = index;
@@ -309,6 +383,25 @@
                 renderTable();
                 alert('Empresa eliminada con éxito');
             }
+        };
+        
+        // Función para mostrar todos los detalles de una empresa
+        window.showDetails = function(index) {
+            const empresa = empresas[index];
+            let detalles = `
+                <strong>Nombre:</strong> ${empresa.nombre_empresa}\n
+                <strong>Email:</strong> ${empresa.email}\n
+                <strong>Teléfono:</strong> ${empresa.telefono}\n
+                <strong>RUC:</strong> ${empresa.ruc}\n
+                <strong>Razón Social:</strong> ${empresa.razon_social}\n
+                <strong>Dirección Fiscal:</strong> ${empresa.direccion_fiscal}\n
+                <strong>Dirección Empresa:</strong> ${empresa.direccion_empresa || 'No especificada'}\n
+                <strong>Tipo:</strong> ${getTipoEmpresaText(empresa.tipo_empresa)}\n
+                <strong>Cursos Requeridos:</strong>\n${empresa.cursos_requeridos || 'No especificados'}\n
+                <strong>Fecha Registro:</strong> ${empresa.fecha_registro}
+            `;
+            
+            alert(detalles);
         };
     </script>
 </body>
