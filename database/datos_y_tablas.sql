@@ -70,7 +70,8 @@ CREATE TABLE Empresa (
     Email_Contacto VARCHAR(100) NOT NULL UNIQUE,
     Telefono_Contacto VARCHAR(40),
     RUC VARCHAR(40),
-    Razon_social VARCHAR(40),
+    Razon_social VARCHAR(200),
+    Tipo_empresa VARCHAR(40),
     Direccion_Fiscal VARCHAR(40),
     Direccion_Empresa VARCHAR(255),
     -- Campos para autenticación
@@ -158,9 +159,9 @@ INSERT INTO VACANTE (ID_Vacante, Fecha_Postulación, Estado_Postulación, ID_Pos
 (205, '2023-11-07', 'Pendiente', 5, 404);
 
 -- Datos para la tabla EMPRESA
-INSERT INTO Empresa (Nombre_Empresa, Email_Contacto, Telefono_Contacto, RUC, Razon_social, Direccion_Fiscal, Direccion_Empresa, Contrasena_Hash, Fecha_Registro) VALUES
-('Tech Solutions Inc.', 'contact@techsolutions.com', '123456789', '20123456789', 'S.A.C.', 'Av. Central 123', 'Av. Central 123, Of. 401, Lima', 'a_hashed_password_1', '2023-01-15'),
-('Global Marketing Co.', 'info@globalmarketing.com', '987654321', '20987654321', 'S.A.', 'Jr. La Luna 456', 'Jr. La Luna 456, Miraflores, Lima', 'a_hashed_password_2', '2022-11-20'),
-('Legal Advisors S.A.C.', 'admin@legaladvisors.com', '555112233', '20555112233', 'S.A.C.', 'Cl. El Sol 789', 'Cl. El Sol 789, San Isidro, Lima', 'a_hashed_password_3', '2023-03-01'),
-('Construction Pros', 'sales@constructionpros.net', '444009988', '20444009988', 'S.R.L.', 'Av. Las Rocas 101', 'Av. Las Rocas 101, Santiago de Surco, Lima', 'a_hashed_password_4', '2022-09-10'),
-('Health Care Group', 'hr@healthcaregroup.org', '777334455', '20777334455', 'A.C.', 'Psje. Los Pinos 202', 'Psje. Los Pinos 202, Lince, Lima', 'a_hashed_password_5', '2023-02-28');
+INSERT INTO Empresa (Nombre_Empresa, Email_Contacto, Telefono_Contacto, RUC, Razon_social,Tipo_empresa, Direccion_Fiscal, Direccion_Empresa, Contrasena_Hash, Fecha_Registro) VALUES
+('Tech Solutions Inc.', 'contact@techsolutions.com', '123456789', '20123456789', 'S.A.C.',"Desarrollo", 'Av. Central 123', 'Av. Central 123, Of. 401, Lima', 'a_hashed_password_1', '2023-01-15'),
+('Global Marketing Co.', 'info@globalmarketing.com', '987654321', '20987654321', 'S.A.',"Marketing", 'Jr. La Luna 456', 'Jr. La Luna 456, Miraflores, Lima', 'a_hashed_password_2', '2022-11-20'),
+('Legal Advisors S.A.C.', 'admin@legaladvisors.com', '555112233', '20555112233', 'S.A.C.',"Legal", 'Cl. El Sol 789', 'Cl. El Sol 789, San Isidro, Lima', 'a_hashed_password_3', '2023-03-01'),
+('Construction Pros', 'sales@constructionpros.net', '444009988', '20444009988', 'S.R.L.',"Ingenieria", 'Av. Las Rocas 101', 'Av. Las Rocas 101, Santiago de Surco, Lima', 'a_hashed_password_4', '2022-09-10'),
+('Health Care Group', 'hr@healthcaregroup.org', '777334455', '20777334455', 'A.C.',"Salud", 'Psje. Los Pinos 202', 'Psje. Los Pinos 202, Lince, Lima', 'a_hashed_password_5', '2023-02-28');
